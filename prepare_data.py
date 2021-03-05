@@ -158,8 +158,8 @@ def main(data_args, model_args):
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    train_dataset = load_dataset('eli5', split='train_eli5')
-    valid_dataset = load_dataset('eli5', split='validation_eli5')
+    train_dataset = load_dataset('eli5', split='train_eli5')[:1000]
+    valid_dataset = load_dataset('eli5', split='validation_eli5')[:1000]
 
     processor = DataProcessor(
         tokenizer,
