@@ -173,7 +173,7 @@ def main(args_file=None):
     logger.info('finished loading dataset')
     '''
 
-    train_dataset, valid_dataset = processed_data(data_args, model_args)
+    train_dataset, valid_dataset = processed_data(data_args, training_args)
 
     # Initialize data_collator
     data_collator = T2TDataCollator(
