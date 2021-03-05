@@ -170,8 +170,8 @@ def main(data_args, model_args):
     )
 
     print("Pre-processing datasets")
-    train_dataset=preprocess_data(train_dataset[:500])
-    valid_dataset=preprocess_data(valid_dataset[:100])
+    train_dataset=preprocess_data(train_dataset)
+    valid_dataset=preprocess_data(valid_dataset)
 
     print("Tokenizing datasets")
     train_dataset = processor.process(train_dataset)
