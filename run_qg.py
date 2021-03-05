@@ -106,7 +106,7 @@ def main(args_file=None):
         model_args, data_args, training_args = parser.parse_json_file(json_file=args_file_path)
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
-        
+
     print("model args", model_args)
     print("data_args", data_args)
     print("training_args", training_args)
