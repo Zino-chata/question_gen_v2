@@ -158,7 +158,7 @@ def main():
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
     train_dataset = load_dataset('eli5', split='train_eli5')
-    valid_dataset = load_dataset('eli5', split='validation_eli5')
+    #valid_dataset = load_dataset('eli5', split='validation_eli5')
 
     processor = DataProcessor(
         tokenizer,
@@ -169,15 +169,15 @@ def main():
 
     print("Pre-processing datasets")
     train_dataset=preprocess_data(train_dataset)
-    valid_dataset=preprocess_data(valid_dataset)
+    #valid_dataset=preprocess_data(valid_dataset)
 
     print("Tokenizing datasets")
     train_dataset = processor.process(train_dataset)
-    valid_dataset = processor.process(valid_dataset)
+    #valid_dataset = processor.process(valid_dataset)
 
     columns = ["source_ids", "target_ids", "attention_mask"]
     train_dataset.set_format(type='torch', columns=columns)
-    valid_dataset.set_format(type='torch', columns=columns)
+    #valid_dataset.set_format(type='torch', columns=columns)
 
     if data_args.train_file_name is None:
         train_file_name = f"train_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
@@ -187,12 +187,12 @@ def main():
         valid_path = os.path.join("data", valid_file_name)
     else:
         train_path = os.path.join("data", data_args.train_file_name)
-        valid_path = os.path.join("data", data_args.valid_file_name)
+        #valid_path = os.path.join("data", data_args.valid_file_name)
     
     torch.save(train_dataset, train_path)
     logger.info(f"saved train dataset at {train_path}")
     
-    torch.save(valid_dataset, valid_path)
+    #torch.save(valid_dataset, valid_path)
     logger.info(f"saved validation dataset at {valid_path}")
     
     tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
