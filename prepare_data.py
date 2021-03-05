@@ -190,8 +190,8 @@ def main():
         valid_file_name = f"valid_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
         valid_path = os.path.join("data", valid_file_name)
     else:
-        train_path = os.path.join("./data", data_args.train_file_name)
-        valid_path = os.path.join("./data", data_args.valid_file_name)
+        train_path = os.path.join("data", data_args.train_file_name)
+        valid_path = os.path.join("data", data_args.valid_file_name)
     
     torch.save(train_dataset, train_path)
     logger.info(f"saved train dataset at {train_path}")
