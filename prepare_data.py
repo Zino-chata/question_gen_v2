@@ -139,7 +139,7 @@ TASK_TO_FILTER_FN = {
 }
 
 
-def main(data_args):
+def main(data_args, model_args):
     #parser = HfArgumentParser((DataTrainingArguments,))
 
     #data_args = parser.parse_args_into_dataclasses()[0]
@@ -150,7 +150,8 @@ def main(data_args):
         level=logging.INFO
     )
 
-    if data_args.model_type == 't5':
+    if model_args.model_type == 't5':
+    #if data_args.model_type == 't5':
         tokenizer = T5Tokenizer.from_pretrained("t5-base")
     else:
         tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")
@@ -162,7 +163,8 @@ def main(data_args):
 
     processor = DataProcessor(
         tokenizer,
-        model_type=data_args.model_type,
+        #model_type=data_args.model_type,
+        model_type=model_args.model_type,
         max_source_length=data_args.max_source_length,
         max_target_length=data_args.max_target_length
     )
@@ -197,7 +199,8 @@ def main(data_args):
     logger.info(f"saved validation dataset at {valid_path}")
     '''
 
-    tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
+    #tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
+    tokenizer_path = f"{model_args.model_type}_qg_tokenizer"
     if not os.path.exists(tokenizer_path):
         os.mkdir(tokenizer_path)
     tokenizer.save_pretrained(tokenizer_path)
