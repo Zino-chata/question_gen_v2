@@ -16,7 +16,6 @@ python run_qg.py \
     --num_train_epochs 10 \
     --seed 42 \
     --do_train True \
-    --evaluate_during_training True \
     --logging_steps 100 \
     --logging_dir tensor_logs \
     --save_total_limit 10
