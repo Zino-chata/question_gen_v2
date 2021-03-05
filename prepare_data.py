@@ -158,8 +158,8 @@ def main(data_args, model_args,training_args):
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    #train_dataset = load_dataset('eli5', split='train_eli5')
-    train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
+    train_dataset = load_dataset('eli5', split='train_eli5')
+    #train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
     valid_dataset = load_dataset('eli5', split='validation_eli5')
 
     train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
@@ -173,7 +173,7 @@ def main(data_args, model_args,training_args):
     )
 
     print("Pre-processing datasets")
-    #train_dataset=preprocess_data(train_dataset)
+    train_dataset=preprocess_data(train_dataset)
     valid_dataset=preprocess_data(valid_dataset)
 
     print("Tokenizing datasets")
