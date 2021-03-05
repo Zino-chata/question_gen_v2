@@ -158,7 +158,7 @@ def main():
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
     train_dataset = load_dataset('eli5', split='train_eli5')
-    #valid_dataset = load_dataset('eli5', split='validation_eli5')
+    valid_dataset = load_dataset('eli5', split='validation_eli5')
 
     processor = DataProcessor(
         tokenizer,
@@ -173,12 +173,13 @@ def main():
 
     print("Tokenizing datasets")
     train_dataset = processor.process(train_dataset)
-    #valid_dataset = processor.process(valid_dataset)
+    valid_dataset = processor.process(valid_dataset)
 
     columns = ["source_ids", "target_ids", "attention_mask"]
     train_dataset.set_format(type='torch', columns=columns)
-    #valid_dataset.set_format(type='torch', columns=columns)
+    valid_dataset.set_format(type='torch', columns=columns)
 
+    '''
     if data_args.train_file_name is None:
         train_file_name = f"train_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
         train_path = os.path.join("data", train_file_name)
@@ -187,19 +188,22 @@ def main():
         valid_path = os.path.join("data", valid_file_name)
     else:
         train_path = os.path.join("data", data_args.train_file_name)
-        #valid_path = os.path.join("data", data_args.valid_file_name)
+        valid_path = os.path.join("data", data_args.valid_file_name)
     
     torch.save(train_dataset, train_path)
     logger.info(f"saved train dataset at {train_path}")
     
-    #torch.save(valid_dataset, valid_path)
-    #logger.info(f"saved validation dataset at {valid_path}")
-    
+    torch.save(valid_dataset, valid_path)
+    logger.info(f"saved validation dataset at {valid_path}")
+    '''
+
     tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
     if not os.path.exists(tokenizer_path):
         os.mkdir(tokenizer_path)
     tokenizer.save_pretrained(tokenizer_path)
     logger.info(f"saved tokenizer at {tokenizer_path}")
+
+    return train_dataset, valid_dataset
 
 def preprocess_data(data):
     answers = [sub["answers"]["text"] for sub in data]
