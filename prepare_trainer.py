@@ -36,6 +36,7 @@ args_dict = {
     "do_train": True,
     "evaluate_during_training": True,
     "logging_steps": 100,
+    "save_total_limit": 10,
     "task": "e2e_qg",
     "valid_for_qg_only": False,
     "qg_format": "highlight_qg_format",
