@@ -158,11 +158,11 @@ def main(data_args, model_args,training_args):
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    train_dataset = load_dataset('eli5', split='train_eli5')
-    #train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
+    #train_dataset = load_dataset('eli5', split='train_eli5')
+    train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
     valid_dataset = load_dataset('eli5', split='validation_eli5')
 
-    #train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
+    train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
 
     processor = DataProcessor(
         tokenizer,
@@ -173,7 +173,7 @@ def main(data_args, model_args,training_args):
     )
 
     print("Pre-processing datasets")
-    train_dataset=preprocess_data(train_dataset)
+    #train_dataset=preprocess_data(train_dataset)
     valid_dataset=preprocess_data(valid_dataset)
 
     print("Tokenizing datasets")
@@ -183,6 +183,10 @@ def main(data_args, model_args,training_args):
     columns = ["source_ids", "target_ids", "attention_mask"]
     train_dataset.set_format(type='torch', columns=columns)
     valid_dataset.set_format(type='torch', columns=columns)
+
+    print("squad",train_dataset[:1])
+    print("eli5", valid_dataset[:1])
+    sys.exit()
 
     '''
     torch.save(train_dataset, data_args.train_file_path)
