@@ -8,7 +8,10 @@ import sys
 import torch
 import nlp
 from transformers import T5Tokenizer, BartTokenizer, HfArgumentParser
-from datasets import list_datasets, load_dataset, list_metrics, load_metric
+from datasets import list_datasets, load_dataset, list_metrics, load_metric, Dataset
+import tqdm
+from collections import OrderedDict
+from torch.utils.data import DataLoader, TensorDataset
 
 logger = logging.getLogger(__name__)
 
@@ -69,9 +72,13 @@ class DataProcessor:
     def process(self, dataset):
         if self.model_type == "t5":
             dataset = dataset.map(self._add_eos_examples)
+            #dataset = map(self._add_eos_examples, dataset)
         
         dataset = dataset.map(self._add_special_tokens)
         dataset = dataset.map(self._convert_to_features, batched=True)
+
+        #dataset = map(self._add_special_tokens,dataset)
+        #dataset = (map(self._convert_to_features, dataset))
         
         return dataset
   
@@ -154,11 +161,8 @@ def main():
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    train_dataset = load_dataset('squad', split='train')
-    valid_dataset = load_dataset('squad', split='validation')
-
-    train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN)
-    valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION)
+    train_dataset = load_dataset('eli5', split='train_eli5')
+    valid_dataset = load_dataset('eli5', split='validation_eli5')
 
     processor = DataProcessor(
         tokenizer,
@@ -167,16 +171,11 @@ def main():
         max_target_length=data_args.max_target_length
     )
 
-    '''
-    train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
-    if data_args.task == 'multi' and data_args.valid_for_qg_only:
-        logger.info("processing valid data only for qg task")
-        valid_dataset = valid_dataset.filter(filter_qg)
-    else:
-        valid_dataset = valid_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
-    '''
+    print("Pre-processing datasets")
+    train_dataset=preprocess_data(train_dataset)
+    valid_dataset=preprocess_data(valid_dataset)
 
-    
+    print("Tokenizing datasets")
     train_dataset = processor.process(train_dataset)
     valid_dataset = processor.process(valid_dataset)
 
@@ -191,8 +190,8 @@ def main():
         valid_file_name = f"valid_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
         valid_path = os.path.join("data", valid_file_name)
     else:
-        train_path = os.path.join("data", data_args.train_file_name)
-        valid_path = os.path.join("data", data_args.valid_file_name)
+        train_path = os.path.join("./data", data_args.train_file_name)
+        valid_path = os.path.join("./data", data_args.valid_file_name)
     
     torch.save(train_dataset, train_path)
     logger.info(f"saved train dataset at {train_path}")
@@ -205,6 +204,38 @@ def main():
         os.mkdir(tokenizer_path)
     tokenizer.save_pretrained(tokenizer_path)
     logger.info(f"saved tokenizer at {tokenizer_path}")
+
+def preprocess_data(data):
+    answers = [sub["answers"]["text"] for sub in data]
+    ans_num = [len(ans) for ans in answers]
+    questions = [sub["title"] for sub in data]
+    questions = [[questions[i]] * ans_num[i] for i in range(len(ans_num))]
+    answers = [item for sublist in answers for item in sublist]
+    questions = [item for sublist in questions for item in sublist]
+
+    data_dict= []
+    for i in tqdm.tqdm(range(len(answers))):
+        current={}
+        current["question"] = questions[i]
+        current["context"]=answers[i]
+        current= process_e2e_qg(current)
+        data_dict.append(current)
+
+    source_text=[sub["source_text"] for sub in data_dict]
+    target_text = [sub["target_text"] for sub in data_dict]
+    task_text = [sub["task"] for sub in data_dict]
+
+    data_dict={"source_text":source_text, "target_text": target_text, "task": task_text}
+    data_dict = Dataset.from_dict(data_dict)
+
+    return data_dict
+
+def process_e2e_qg(paragraph):
+    source_text = f"generate questions: {paragraph['context'].strip()}"
+    questions = [paragraph['question'].strip()]
+    target_text = " {sep_token} ".join(questions)
+    target_text = f"{target_text} {{sep_token}}"
+    return {"source_text":source_text, "target_text": target_text,"task":"e2e_qg"}
 
 
 if __name__ == "__main__":

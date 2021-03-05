@@ -1,5 +1,4 @@
 pyforest==1.0.3
-#apex==0.9.10dev
 dataclasses==0.8
 datasets==1.3.0
 nlp==0.4.0

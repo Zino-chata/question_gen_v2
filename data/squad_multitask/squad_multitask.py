@@ -209,31 +209,31 @@ class SquadMultitask(nlp.GeneratorBasedBuilder):
         tasks = ['qa', 'qg', 'ans_ext', 'e2e_qg']
         with open(filepath) as f:
             squad = json.load(f)
-            for article in squad["data"]:
-                title = article.get("title", "").strip()
-                for paragraph in article["paragraphs"]:
-                    context = paragraph["context"].strip()
-                    
-                    if 'ans_ext' in tasks:
-                        ans_ext_examples = self.process_ans_ext(paragraph)
-                        for example in ans_ext_examples:
-                                yield count, example
-                                count += 1
-                    
-                    if 'e2e_qg' in tasks:
-                        yield count, self.process_e2e_qg(paragraph)
-                        count += 1
-                    
-                    for qa in paragraph["qas"]:
-                        question = qa["question"].strip()
-                        id_ = qa["id"]
+        for article in squad["data"]:
+            title = article.get("title", "").strip()
+            for paragraph in article["paragraphs"]:
+                context = paragraph["context"].strip()
 
-                        answers = [answer["text"].strip() for answer in qa["answers"]]
-                        for task in tasks:
-                            if task == 'qa':
-                                yield count, self.process_qa_text(context, question, answers[0])
-                                count += 1
-                            
-                            if task == 'qg':
-                                yield count, self.process_qg_text(context, question, qa["answers"][0])
-                                count += 1
+                if 'ans_ext' in tasks:
+                    ans_ext_examples = self.process_ans_ext(paragraph)
+                    for example in ans_ext_examples:
+                            yield count, example
+                            count += 1
+
+                if 'e2e_qg' in tasks:
+                    yield count, self.process_e2e_qg(paragraph)
+                    count += 1
+
+                for qa in paragraph["qas"]:
+                    question = qa["question"].strip()
+                    id_ = qa["id"]
+
+                    answers = [answer["text"].strip() for answer in qa["answers"]]
+                    for task in tasks:
+                        if task == 'qa':
+                            yield count, self.process_qa_text(context, question, answers[0])
+                            count += 1
+
+                        if task == 'qg':
+                            yield count, self.process_qg_text(context, question, qa["answers"][0])
+                            count += 1
