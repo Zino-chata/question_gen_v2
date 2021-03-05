@@ -169,6 +169,7 @@ def main(args_file=None):
 
     train_dataset, valid_dataset = processed_data(data_args,model_args, training_args)
 
+    '''
     # Get datasets
     logger.info('loading dataset')
 
@@ -176,7 +177,9 @@ def main(args_file=None):
     valid_dataset = torch.load(data_args.valid_file_path) if training_args.do_eval else None
 
     logger.info('finished loading dataset')
-
+    '''
+    print(train_dataset[0])
+    sys.exit()
 
     # Initialize data_collator
     data_collator = T2TDataCollator(
