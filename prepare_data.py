@@ -183,8 +183,8 @@ def main(data_args, model_args,training_args):
 
 
 
-    train_path = os.path.join("data", data_args.train_file_name)
-    valid_path = os.path.join("data", data_args.valid_file_name)
+    train_path = os.path.join("data", model_args.train_file_name)
+    valid_path = os.path.join("data", model_args.valid_file_name)
     
     torch.save(train_dataset, train_path)
     logger.info(f"saved train dataset at {train_path}")
