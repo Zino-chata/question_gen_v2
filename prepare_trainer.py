@@ -43,7 +43,8 @@ args_dict = {
     "max_source_length": 512,
     "max_target_length": 32,
     "train_file_name": "train_data.pt",
-    "valid_file_name": "valid_data.pt"
+    "valid_file_name": "valid_data.pt",
+    "data_dir": "data/squad_multitask/"
 }
 
 run_qg(args_dict)
