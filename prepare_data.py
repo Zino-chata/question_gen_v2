@@ -72,14 +72,10 @@ class DataProcessor:
     def process(self, dataset):
         if self.model_type == "t5":
             dataset = dataset.map(self._add_eos_examples)
-            #dataset = map(self._add_eos_examples, dataset)
         
         dataset = dataset.map(self._add_special_tokens)
         dataset = dataset.map(self._convert_to_features, batched=True)
 
-        #dataset = map(self._add_special_tokens,dataset)
-        #dataset = (map(self._convert_to_features, dataset))
-        
         return dataset
   
     def _add_eos_examples(self, example):
@@ -172,15 +168,15 @@ def main():
     )
 
     print("Pre-processing datasets")
-    train_dataset=preprocess_data(train_dataset)
+    #train_dataset=preprocess_data(train_dataset)
     valid_dataset=preprocess_data(valid_dataset)
 
     print("Tokenizing datasets")
-    train_dataset = processor.process(train_dataset)
+    #train_dataset = processor.process(train_dataset)
     valid_dataset = processor.process(valid_dataset)
 
     columns = ["source_ids", "target_ids", "attention_mask"]
-    train_dataset.set_format(type='torch', columns=columns)
+    #train_dataset.set_format(type='torch', columns=columns)
     valid_dataset.set_format(type='torch', columns=columns)
 
     if data_args.train_file_name is None:
@@ -193,7 +189,7 @@ def main():
         train_path = os.path.join("data", data_args.train_file_name)
         valid_path = os.path.join("data", data_args.valid_file_name)
     
-    torch.save(train_dataset, train_path)
+    #torch.save(train_dataset, train_path)
     logger.info(f"saved train dataset at {train_path}")
     
     torch.save(valid_dataset, valid_path)

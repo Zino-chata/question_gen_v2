@@ -1,6 +1,6 @@
 python prepare_data.py \
     --task e2e_qg \
-    --valid_for_qg_only \
+    --valid_for_qg_only False\
     --model_type t5 \
     --qg_format highlight_qg_format \
     --max_source_length 512 \
