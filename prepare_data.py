@@ -182,15 +182,15 @@ def main(data_args, model_args):
     valid_dataset.set_format(type='torch', columns=columns)
 
 
-    if data_args.train_file_name is None:
-        train_file_name = f"train_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
+    if model_args.train_file_name is None:
+        train_file_name = f"train_data_{model_args.task}_{data_args.qg_format}_{model_args.model_type}.pt"
         train_path = os.path.join("data", train_file_name)
 
-        valid_file_name = f"valid_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
+        valid_file_name = f"valid_data_{model_args.task}_{data_args.qg_format}_{model_args.model_type}.pt"
         valid_path = os.path.join("data", valid_file_name)
     else:
-        train_path = os.path.join("data", data_args.train_file_name)
-        valid_path = os.path.join("data", data_args.valid_file_name)
+        train_path = os.path.join("data", model_args.train_file_name)
+        valid_path = os.path.join("data", model_args.valid_file_name)
     
     torch.save(train_dataset, train_path)
     logger.info(f"saved train dataset at {train_path}")
