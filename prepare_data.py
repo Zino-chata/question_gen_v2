@@ -176,10 +176,13 @@ def main(data_args, model_args,training_args):
     print("Tokenizing datasets")
     train_dataset = processor.process(train_dataset)
     valid_dataset = processor.process(valid_dataset)
+    print("before:", train_dataset[:1])
 
     columns = ["source_ids", "target_ids", "attention_mask"]
     train_dataset.set_format(type='torch', columns=columns)
     valid_dataset.set_format(type='torch', columns=columns)
+    print("after:", train_dataset[:1])
+    sys.exit()
 
     '''
     torch.save(train_dataset, data_args.train_file_path)
