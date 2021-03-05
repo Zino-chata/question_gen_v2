@@ -178,8 +178,6 @@ def main(args_file=None):
 
     logger.info('finished loading dataset')
     '''
-    print(train_dataset[0])
-    sys.exit()
 
     # Initialize data_collator
     data_collator = T2TDataCollator(
