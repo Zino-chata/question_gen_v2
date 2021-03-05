@@ -193,7 +193,7 @@ def main():
     logger.info(f"saved train dataset at {train_path}")
     
     #torch.save(valid_dataset, valid_path)
-    logger.info(f"saved validation dataset at {valid_path}")
+    #logger.info(f"saved validation dataset at {valid_path}")
     
     tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
     if not os.path.exists(tokenizer_path):
