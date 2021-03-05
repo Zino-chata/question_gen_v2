@@ -181,7 +181,7 @@ def main(data_args, model_args):
     train_dataset.set_format(type='torch', columns=columns)
     valid_dataset.set_format(type='torch', columns=columns)
 
-    '''
+
     if data_args.train_file_name is None:
         train_file_name = f"train_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
         train_path = os.path.join("data", train_file_name)
@@ -197,7 +197,7 @@ def main(data_args, model_args):
     
     torch.save(valid_dataset, valid_path)
     logger.info(f"saved validation dataset at {valid_path}")
-    '''
+
 
     #tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
     tokenizer_path = f"{model_args.model_type}_qg_tokenizer"
