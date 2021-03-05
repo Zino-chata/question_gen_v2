@@ -162,7 +162,7 @@ def main(data_args, model_args,training_args):
     #train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
     valid_dataset = load_dataset('eli5', split='validation_eli5')
 
-    train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
+    #train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
 
     processor = DataProcessor(
         tokenizer,
