@@ -1,6 +1,5 @@
 python run_qg.py \
     --task e2e_qg \
-    --valid_for_qg_only False\
     --model_type t5 \
     --qg_format highlight_qg_format \
     --max_source_length 512 \
@@ -10,7 +9,7 @@ python run_qg.py \
     --train_file_path data/train_data.pt \
     --valid_file_path data/valid_data.pt \
     --output_dir t5-small-e2e-qg-zino \
-    --per_device_train_batch_size: 32 \
+    --per_device_train_batch_size 32 \
     --per_device_eval_batch_size 16 \
     --gradient_accumulation_steps 8 \
     --learning_rate 1e-4 \
@@ -18,4 +17,6 @@ python run_qg.py \
     --seed 42 \
     --do_train True \
     --evaluate_during_training True \
-    --logging_steps 100
+    --logging_steps 100 \
+    --logging_dir tensor_logs \
+    --save_total_limit 10
