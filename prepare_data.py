@@ -139,10 +139,10 @@ TASK_TO_FILTER_FN = {
 }
 
 
-def main():
-    parser = HfArgumentParser((DataTrainingArguments,))
+def main(data_args):
+    #parser = HfArgumentParser((DataTrainingArguments,))
 
-    data_args = parser.parse_args_into_dataclasses()[0]
+    #data_args = parser.parse_args_into_dataclasses()[0]
 
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
@@ -169,7 +169,7 @@ def main():
 
     print("Pre-processing datasets")
     train_dataset=preprocess_data(train_dataset)
-    #valid_dataset=preprocess_data(valid_dataset)
+    valid_dataset=preprocess_data(valid_dataset)
 
     print("Tokenizing datasets")
     train_dataset = processor.process(train_dataset)
@@ -179,7 +179,7 @@ def main():
     train_dataset.set_format(type='torch', columns=columns)
     valid_dataset.set_format(type='torch', columns=columns)
 
-
+    '''
     if data_args.train_file_name is None:
         train_file_name = f"train_data_{data_args.task}_{data_args.qg_format}_{data_args.model_type}.pt"
         train_path = os.path.join("data", train_file_name)
@@ -195,7 +195,7 @@ def main():
     
     torch.save(valid_dataset, valid_path)
     logger.info(f"saved validation dataset at {valid_path}")
-
+    '''
 
     tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
     if not os.path.exists(tokenizer_path):
