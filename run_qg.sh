@@ -19,4 +19,4 @@ python run_qg.py \
     --logging_steps 100 \
     --logging_dir tensor_logs \
     --save_total_limit 10 \
-    --overwrite_output_dir t5-small-e2e-qg-zino
+    --overwrite_output_dir True
