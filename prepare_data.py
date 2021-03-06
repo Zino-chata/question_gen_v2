@@ -12,6 +12,7 @@ from datasets import list_datasets, load_dataset, list_metrics, load_metric, Dat
 import tqdm
 from collections import OrderedDict
 from torch.utils.data import DataLoader, TensorDataset
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -181,12 +182,8 @@ def main(data_args, model_args,training_args):
     valid_dataset = processor.process(valid_dataset)
 
     columns = ["source_ids", "target_ids", "attention_mask"]
-    train_dataset.set_format(type='torch', columns=columns)
     valid_dataset.set_format(type='torch', columns=columns)
-
-    print("squad",train_dataset[:1])
-    print("eli5", valid_dataset[:1])
-    sys.exit()
+    train_dataset.set_format(type='torch', columns=columns)
 
     '''
     torch.save(train_dataset, data_args.train_file_path)
@@ -226,7 +223,7 @@ def preprocess_data(data):
     task_text = [sub["task"] for sub in data_dict]
 
     data_dict={"source_text":source_text[:1000], "target_text": target_text[:1000], "task": task_text[:1000]}
-    data_dict = Dataset.from_dict(data_dict)
+    data_dict = nlp.Dataset.from_dict(data_dict)
 
     return data_dict
 
