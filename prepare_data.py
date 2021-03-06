@@ -159,11 +159,11 @@ def main(data_args, model_args,training_args):
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    #train_dataset = load_dataset('eli5', split='train_eli5')
-    train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
+    train_dataset = load_dataset('eli5', split='train_eli5')
+    #train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
     valid_dataset = load_dataset('eli5', split='validation_eli5')
 
-    train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
+    #train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
 
     processor = DataProcessor(
         tokenizer,
@@ -174,7 +174,7 @@ def main(data_args, model_args,training_args):
     )
 
     print("Pre-processing datasets")
-    #train_dataset=preprocess_data(train_dataset)
+    train_dataset=preprocess_data(train_dataset)
     valid_dataset=preprocess_data(valid_dataset)
 
     print("Tokenizing datasets")
@@ -222,7 +222,7 @@ def preprocess_data(data):
     target_text = [sub["target_text"] for sub in data_dict]
     task_text = [sub["task"] for sub in data_dict]
 
-    data_dict={"source_text":source_text[:1000], "target_text": target_text[:1000], "task": task_text[:1000]}
+    data_dict={"source_text":source_text, "target_text": target_text, "task": task_text}
     data_dict = nlp.Dataset.from_dict(data_dict)
 
     return data_dict
