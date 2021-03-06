@@ -235,10 +235,10 @@ def _mp_fn(index):
     main()
 
 def run_qg(args_dict):
-    with open("args.json", 'w') as f:
+    with open("../args.json", 'w') as f:
         json.dump(args_dict, f)
     
-    main(args_file="args.json")
+    main(args_file="../args.json")
 
 if __name__ == "__main__":
     main()
