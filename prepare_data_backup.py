@@ -10,6 +10,9 @@ import nlp
 from transformers import T5Tokenizer, BartTokenizer, HfArgumentParser
 from datasets import list_datasets, load_dataset, list_metrics, load_metric, Dataset
 import tqdm
+from collections import OrderedDict
+from torch.utils.data import DataLoader, TensorDataset
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -137,10 +140,10 @@ TASK_TO_FILTER_FN = {
 }
 
 
-def main():
-    parser = HfArgumentParser((DataTrainingArguments,))
+def main(data_args, model_args,training_args):
+    #parser = HfArgumentParser((DataTrainingArguments,))
 
-    data_args = parser.parse_args_into_dataclasses()[0]
+    #data_args = parser.parse_args_into_dataclasses()[0]
 
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
@@ -148,7 +151,8 @@ def main():
         level=logging.INFO
     )
 
-    if data_args.model_type == 't5':
+    if model_args.model_type == 't5':
+    #if data_args.model_type == 't5':
         tokenizer = T5Tokenizer.from_pretrained("t5-base")
     else:
         tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")
@@ -156,11 +160,15 @@ def main():
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
     train_dataset = load_dataset('eli5', split='train_eli5')
+    #train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
     valid_dataset = load_dataset('eli5', split='validation_eli5')
+
+    #train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
 
     processor = DataProcessor(
         tokenizer,
-        model_type=data_args.model_type,
+        #model_type=data_args.model_type,
+        model_type=model_args.model_type,
         max_source_length=data_args.max_source_length,
         max_target_length=data_args.max_target_length
     )
@@ -177,17 +185,22 @@ def main():
     valid_dataset.set_format(type='torch', columns=columns)
     train_dataset.set_format(type='torch', columns=columns)
 
-    torch.save(train_dataset, data_args.train_file_name)
-    logger.info(f"saved train dataset at {data_args.train_file_name}")
+    '''
+    torch.save(train_dataset, data_args.train_file_path)
+    logger.info(f"saved train dataset at {data_args.train_file_path}")
     
-    torch.save(valid_dataset, data_args.valid_file_name)
-    logger.info(f"saved validation dataset at {data_args.valid_file_name}")
+    torch.save(valid_dataset, data_args.valid_file_path)
+    logger.info(f"saved validation dataset at {data_args.valid_file_path}")
+    '''
 
-    tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
+    #tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
+    tokenizer_path = f"{model_args.model_type}_qg_tokenizer"
     if not os.path.exists(tokenizer_path):
         os.mkdir(tokenizer_path)
     tokenizer.save_pretrained(tokenizer_path)
     logger.info(f"saved tokenizer at {tokenizer_path}")
+
+    return train_dataset, valid_dataset
 
 def preprocess_data(data):
     answers = [sub["answers"]["text"] for sub in data]

@@ -106,6 +106,10 @@ def main(args_file=None):
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
+    print("model args", model_args)
+    print("data_args", data_args)
+    print("training_args", training_args)
+
     assert model_args.model_type in list(MODEL_TYPE_TO_TOKENIZER.keys()), "model type should be 't5' or 'bart'"
 
     if (
@@ -162,6 +166,9 @@ def main(args_file=None):
         freeze_embeds(model)
         assert_not_all_frozen(model)
 
+    train_dataset, valid_dataset = processed_data(data_args,model_args, training_args)
+
+    '''
     # Get datasets
     logger.info('loading dataset')
 
@@ -169,7 +176,7 @@ def main(args_file=None):
     valid_dataset = torch.load(data_args.valid_file_path) if training_args.do_eval else None
 
     logger.info('finished loading dataset')
-
+    '''
 
     # Initialize data_collator
     data_collator = T2TDataCollator(
