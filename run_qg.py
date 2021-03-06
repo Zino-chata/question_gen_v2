@@ -23,6 +23,7 @@ from transformers import (
 from trainer import Trainer
 from data_collator import T2TDataCollator
 from utils import freeze_embeds, assert_not_all_frozen
+from prepare_data import main as processed_data
 
 MODEL_TYPE_TO_TOKENIZER = {
     "t5": T5Tokenizer,
@@ -162,6 +163,9 @@ def main(args_file=None):
         freeze_embeds(model)
         assert_not_all_frozen(model)
 
+    train_dataset, valid_dataset = processed_data(data_args,model_args, training_args)
+
+    '''
     # Get datasets
     logger.info('loading dataset')
 
@@ -169,7 +173,7 @@ def main(args_file=None):
     valid_dataset = torch.load(data_args.valid_file_path) if training_args.do_eval else None
 
     logger.info('finished loading dataset')
-
+    '''
 
     # Initialize data_collator
     data_collator = T2TDataCollator(

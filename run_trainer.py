@@ -1,4 +1,4 @@
-from run_qg import run_qg
+from question_gen_v2.backUp.run_qg import run_qg
 
 args_dict = {
     "model_name_or_path": "t5-small",
