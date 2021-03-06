@@ -18,5 +18,6 @@ python run_qg.py \
     --do_train True \
     --logging_steps 100 \
     --logging_dir tensor_logs \
+    --evaluate_during_training True \
     --save_total_limit 10 \
     --overwrite_output_dir True
