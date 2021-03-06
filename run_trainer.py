@@ -17,14 +17,7 @@ args_dict = {
     "evaluate_during_training": True,
     "logging_steps": 100,
     "save_total_limit": 10,
-    "task": "e2e_qg",
-    "valid_for_qg_only": False,
-    "qg_format": "highlight_qg_format",
-    "max_source_length": 512,
-    "max_target_length": 32,
-    "train_file_name": "train_data.pt",
-    "valid_file_name": "valid_data.pt",
-    "data_dir": "data/squad_multitask/"
+    "overwrite_output_dir": True
 }
 
 run_qg(args_dict)
