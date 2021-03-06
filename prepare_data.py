@@ -220,7 +220,7 @@ def preprocess_data(data):
     target_text = [sub["target_text"] for sub in data_dict]
     task_text = [sub["task"] for sub in data_dict]
 
-    data_dict={"source_text":source_text[:1000], "target_text": target_text[:1000], "task": task_text[:1000]}
+    data_dict={"source_text":source_text, "target_text": target_text, "task": task_text}
     data_dict = nlp.Dataset.from_dict(data_dict)
 
     return data_dict
