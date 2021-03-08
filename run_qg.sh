@@ -8,15 +8,15 @@ python run_qg.py \
     --tokenizer_name_or_path t5_qg_tokenizer \
     --train_file_path data/train_data.pt \
     --valid_file_path data/valid_data.pt \
-    --output_dir t5-small-e2e-qg-zino \
+    --output_dir t5-smaller-e2e-qg-zino \
     --per_device_train_batch_size 32 \
     --per_device_eval_batch_size 32 \
     --gradient_accumulation_steps 8 \
     --learning_rate 1e-4 \
-    --num_train_epochs 10 \
+    --num_train_epochs 50 \
     --seed 42 \
     --do_train True \
     --logging_steps 100 \
     --logging_dir tensor_logs \
-    --save_total_limit 20 \
+    --save_total_limit 3 \
     --overwrite_output_dir True

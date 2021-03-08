@@ -201,12 +201,19 @@ def main(data_args, model_args,training_args):
     return train_dataset, valid_dataset
 
 def preprocess_data(data):
+    '''
+    #multiple answers to a question-- take all
     answers = [sub["answers"]["text"] for sub in data]
     ans_num = [len(ans) for ans in answers]
     questions = [sub["title"] for sub in data]
     questions = [[questions[i]] * ans_num[i] for i in range(len(ans_num))]
     answers = [item for sublist in answers for item in sublist]
     questions = [item for sublist in questions for item in sublist]
+    '''
+
+    #take the first answer with the highest score only
+    answers = [sub["answers"]["text"][0] for sub in data]
+    questions = [sub["title"] for sub in data]
 
     data_dict= []
     for i in tqdm.tqdm(range(len(answers))):
