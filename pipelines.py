@@ -300,7 +300,8 @@ SUPPORTED_TASKS = {
     "e2e-qg": {
         "impl": E2EQGPipeline,
         "default": {
-            "model": "valhalla/t5-small-e2e-qg",
+            #"model": "valhalla/t5-small-e2e-qg",
+            "model": "t5-small-e2e-qg-zino/checkpoint-31000",
         }
     }
 }
@@ -347,7 +348,8 @@ def pipeline(
     
     # Instantiate model if needed
     if isinstance(model, str):
-        model = AutoModelForSeq2SeqLM.from_pretrained(model)
+        #model = AutoModelForSeq2SeqLM.from_pretrained(model)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model, local_files_only=True)
     
     if task == "question-generation":
         if ans_model is None:
