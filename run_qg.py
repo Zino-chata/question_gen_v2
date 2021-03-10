@@ -146,6 +146,9 @@ def main(args_file=None):
     # Distributed training:
     # The .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
+
+    train_dataset, valid_dataset = processed_data(data_args, model_args, training_args)
+    
     tokenizer_cls = MODEL_TYPE_TO_TOKENIZER[model_args.model_type]
     tokenizer = tokenizer_cls.from_pretrained(
         model_args.tokenizer_name_or_path if model_args.tokenizer_name_or_path else model_args.model_name_or_path,
@@ -162,8 +165,6 @@ def main(args_file=None):
         logger.info("freezing embeddings of the model")
         freeze_embeds(model)
         assert_not_all_frozen(model)
-
-    train_dataset, valid_dataset = processed_data(data_args,model_args, training_args)
 
     '''
     # Get datasets
