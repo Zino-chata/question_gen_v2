@@ -4,15 +4,15 @@ python run_qg.py \
     --qg_format highlight_qg_format \
     --max_source_length 512 \
     --max_target_length 32 \
-    --model_name_or_path t5-small \
+    --model_name_or_path t5-smaller-e2e-qg-zino/checkpoint-213000 \
     --tokenizer_name_or_path t5_qg_tokenizer \
     --train_file_path data/train_data.pt \
     --valid_file_path data/valid_data.pt \
-    --output_dir t5-smaller-e2e-qg-zino \
+    --output_dir t5-current-e2e-qg-zino \
     --per_device_train_batch_size 32 \
     --per_device_eval_batch_size 32 \
     --gradient_accumulation_steps 8 \
-    --learning_rate 1e-4 \
+    --learning_rate 1e-5 \
     --num_train_epochs 200 \
     --seed 42 \
     --do_train True \
