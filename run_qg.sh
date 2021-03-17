@@ -13,7 +13,7 @@ python run_qg.py \
     --per_device_eval_batch_size 32 \
     --gradient_accumulation_steps 8 \
     --learning_rate 1e-5 \
-    --num_train_epochs 200 \
+    --num_train_epochs 400 \
     --seed 42 \
     --do_train True \
     --logging_steps 100 \
