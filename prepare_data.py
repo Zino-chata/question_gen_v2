@@ -4,7 +4,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 import sys
-
+import json
 import torch
 import nlp
 from transformers import T5Tokenizer, BartTokenizer, HfArgumentParser
@@ -157,9 +157,9 @@ def main(data_args, model_args,training_args):
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    train_dataset = load_dataset('eli5', split='train_eli5')
-    #train_dataset = nlp.load_dataset(data_args.data_dir, name=data_args.qg_format, split=nlp.Split.TRAIN)
-    valid_dataset = load_dataset('eli5', split='validation_eli5')
+    #train_dataset = load_dataset('eli5', split='train_eli5')
+    #valid_dataset = load_dataset('eli5', split='validation_eli5')
+    train_dataset, valid_dataset=get_qrecc_data()
 
     #train_dataset = train_dataset.filter(TASK_TO_FILTER_FN[data_args.task])
 
@@ -192,13 +192,24 @@ def main(data_args, model_args,training_args):
     '''
 
     #tokenizer_path = f"{data_args.model_type}_qg_tokenizer"
-    tokenizer_path = f"{model_args.model_type}_qg_tokenizer"
+    tokenizer_path = f"{model_args.model_type}_ctx_tokenizer"
     if not os.path.exists(tokenizer_path):
         os.mkdir(tokenizer_path)
     tokenizer.save_pretrained(tokenizer_path)
     logger.info(f"saved tokenizer at {tokenizer_path}")
 
     return train_dataset, valid_dataset
+
+def read_json(file_path):
+    with open(file_path) as f:
+        data = json.load(f)
+    return data
+
+def get_qrecc_data():
+    train_data=read_json("../nqa_service/qrecc_data/qrecc_data/qrecc_train.json")
+    test_data=read_json("../nqa_service/qrecc_data/qrecc_data/qrecc_test.json")
+    print(len(train_data), len(test_data))
+    return train_data, test_data
 
 def preprocess_data(data):
     '''
@@ -212,8 +223,9 @@ def preprocess_data(data):
     '''
 
     #take the first answer with the highest score only
-    answers = [sub["answers"]["text"][0] for sub in data]
-    questions = [sub["title"] for sub in data]
+    #answers = [sub["answers"]["text"][0] for sub in data]
+    answers = [' '.join([sub["Context"][i] for i in range(len(sub["Context"]))][-10:] + [sub["Question"]])[-1024:] for sub in data]
+    questions = [sub["Rewrite"] for sub in data]
 
     data_dict= []
     for i in tqdm.tqdm(range(len(answers))):

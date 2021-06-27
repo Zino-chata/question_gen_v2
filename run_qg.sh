@@ -2,21 +2,21 @@ python run_qg.py \
     --task e2e_qg \
     --model_type t5 \
     --qg_format highlight_qg_format \
-    --max_source_length 512 \
-    --max_target_length 32 \
-    --model_name_or_path t5-smaller-e2e-qg-zino/checkpoint-213000 \
-    --tokenizer_name_or_path t5_qg_tokenizer \
+    --max_source_length 1024 \
+    --max_target_length 128 \
+    --model_name_or_path t5-small \
+    --tokenizer_name_or_path t5_ctx_tokenizer \
     --train_file_path data/train_data.pt \
     --valid_file_path data/valid_data.pt \
-    --output_dir t5-current-e2e-qg-zino \
-    --per_device_train_batch_size 32 \
+    --output_dir t5-ctx \
+    --per_device_train_batch_size 8 \
     --per_device_eval_batch_size 32 \
-    --gradient_accumulation_steps 8 \
-    --learning_rate 1e-5 \
-    --num_train_epochs 400 \
+    --gradient_accumulation_steps 2 \
+    --learning_rate 3e-3 \
+    --num_train_epochs 10 \
     --seed 42 \
     --do_train True \
-    --logging_steps 100 \
+    --logging_steps 3 \
     --logging_dir tensor_logs \
     --save_total_limit 3 \
     --overwrite_output_dir True
