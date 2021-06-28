@@ -207,9 +207,14 @@ def read_json(file_path):
 
 def get_qrecc_data():
     train_data=read_json("../nqa_service/qrecc_data/qrecc_data/qrecc_train.json")
-    test_data=read_json("../nqa_service/qrecc_data/qrecc_data/qrecc_test.json")
-    print(len(train_data), len(test_data))
-    return train_data, test_data
+    #test_data=read_json("../nqa_service/qrecc_data/qrecc_data/qrecc_test.json")
+
+    dev_split = int(0.1 * len(train_data))
+    dev_data = train_data[:dev_split]
+    train_data = train_data[dev_split:]
+
+    print(len(train_data), len(dev_data))
+    return train_data, dev_data
 
 def preprocess_data(data):
     '''
