@@ -8,7 +8,7 @@ python run_qg.py \
     --tokenizer_name_or_path t5_ctx_tokenizer \
     --train_file_path data/train_data.pt \
     --valid_file_path data/valid_data.pt \
-    --output_dir t5-ctx \
+    --output_dir t5-ctx-v2 \
     --per_device_train_batch_size 8 \
     --per_device_eval_batch_size 32 \
     --gradient_accumulation_steps 2 \

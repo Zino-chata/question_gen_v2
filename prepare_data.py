@@ -229,7 +229,8 @@ def preprocess_data(data):
 
     #take the first answer with the highest score only
     #answers = [sub["answers"]["text"][0] for sub in data]
-    answers = [' '.join([sub["Context"][i] for i in range(len(sub["Context"]))][-10:] + [sub["Question"]])[-1024:] for sub in data]
+    #answers = [' '.join([sub["Context"][i] for i in range(len(sub["Context"]))][-10:] + [sub["Question"]])[-1024:] for sub in data]
+    answers = [' '.join([sub["Context"][i] for i in range(0,len(sub["Context"]),2)][-5:] + [sub["Question"]])[-1024:] for sub in data]
     questions = [sub["Rewrite"] for sub in data]
 
     data_dict= []
